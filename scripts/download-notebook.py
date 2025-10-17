@@ -10,6 +10,7 @@ import argparse
 import json
 import logging
 import os
+import time
 from pathlib import Path
 from typing import Dict, Tuple
 from urllib.error import HTTPError, URLError
@@ -106,7 +107,7 @@ def parse_notebook_url(url: str) -> Tuple[str, str]:
     return username, slug
 
 
-def fetch_notebook_metadata(username: str, slug: str, token: str) -> Dict[str, str]:
+def fetch_notebook_metadata(username: str, slug: str, token: str, retries: int = 3) -> Dict[str, str]:
     """Call the Jovian metadata API to retrieve notebook details."""
     api_url = f"https://api.jovian.com/user/{username}/gist/{slug}"
     LOGGER.info("Fetching notebook metadata from %s", api_url)
@@ -117,15 +118,35 @@ def fetch_notebook_metadata(username: str, slug: str, token: str) -> Dict[str, s
         for key, value in headers.items()
     }
     LOGGER.debug("Request headers: %s", sanitized_headers)
+    if LOGGER.isEnabledFor(logging.DEBUG):
+        LOGGER.debug(
+            "cURL command: curl -H 'Authorization: Bearer %s' %s",
+            token,
+            api_url,
+        )
     request = Request(api_url, headers=headers)
 
-    try:
-        with urlopen(request, timeout=30) as response:
-            payload = response.read()
-    except HTTPError as http_err:
-        raise RuntimeError(f"HTTP error while fetching metadata: {http_err}") from http_err
-    except URLError as url_err:
-        raise RuntimeError(f"Network error while fetching metadata: {url_err}") from url_err
+    attempt = 0
+    while True:
+        attempt += 1
+        try:
+            with urlopen(request, timeout=30) as response:
+                payload = response.read()
+            break
+        except HTTPError as http_err:
+            raise RuntimeError(f"HTTP error while fetching metadata: {http_err}") from http_err
+        except URLError as url_err:
+            if attempt >= retries:
+                raise RuntimeError(f"Network error while fetching metadata after {retries} attempts: {url_err}") from url_err
+            wait_seconds = 2 ** (attempt - 1)
+            LOGGER.warning(
+                "Network error while fetching metadata (attempt %s/%s): %s. Retrying in %s seconds...",
+                attempt,
+                retries,
+                url_err,
+                wait_seconds,
+            )
+            time.sleep(wait_seconds)
 
     try:
         metadata = json.loads(payload)
@@ -136,18 +157,36 @@ def fetch_notebook_metadata(username: str, slug: str, token: str) -> Dict[str, s
     return metadata
 
 
-def download_file(raw_url: str, destination: Path) -> None:
+def download_file(raw_url: str, destination: Path, retries: int = 3) -> None:
     """Download the notebook content from raw_url to the destination path."""
     LOGGER.info("Downloading notebook content to %s", destination)
     request = Request(raw_url)
+    if LOGGER.isEnabledFor(logging.DEBUG):
+        LOGGER.debug("cURL command: curl -L %s -o %s", raw_url, destination)
 
-    try:
-        with urlopen(request, timeout=60) as response:
-            content = response.read()
-    except HTTPError as http_err:
-        raise RuntimeError(f"HTTP error while downloading notebook: {http_err}") from http_err
-    except URLError as url_err:
-        raise RuntimeError(f"Network error while downloading notebook: {url_err}") from url_err
+    attempt = 0
+    while True:
+        attempt += 1
+        try:
+            with urlopen(request, timeout=60) as response:
+                content = response.read()
+            break
+        except HTTPError as http_err:
+            raise RuntimeError(f"HTTP error while downloading notebook: {http_err}") from http_err
+        except URLError as url_err:
+            if attempt >= retries:
+                raise RuntimeError(
+                    f"Network error while downloading notebook after {retries} attempts: {url_err}"
+                ) from url_err
+            wait_seconds = 2 ** (attempt - 1)
+            LOGGER.warning(
+                "Network error while downloading notebook (attempt %s/%s): %s. Retrying in %s seconds...",
+                attempt,
+                retries,
+                url_err,
+                wait_seconds,
+            )
+            time.sleep(wait_seconds)
 
     destination.write_bytes(content)
     LOGGER.info("Downloaded notebook saved at %s", destination)
