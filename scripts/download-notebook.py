@@ -95,7 +95,12 @@ def parse_notebook_url(url: str) -> Tuple[str, str]:
     if not parsed.scheme.startswith("http"):
         raise ValueError("Notebook URL must start with http:// or https://")
 
-    if parsed.netloc not in {"jovian.com", "www.jovian.com"}:
+    netloc = parsed.netloc.lower()
+    if netloc in {"jovian.ai", "www.jovian.ai"}:
+        LOGGER.debug("Normalizing Jovian domain from %s to jovian.com", netloc)
+        netloc = "jovian.com"
+
+    if netloc not in {"jovian.com", "www.jovian.com"}:
         raise ValueError("Notebook URL must point to jovian.com")
 
     parts = [part for part in parsed.path.strip("/").split("/") if part]
