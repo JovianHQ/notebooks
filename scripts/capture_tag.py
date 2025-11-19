@@ -42,6 +42,7 @@ def main() -> None:
     input_el.clear()
     # print("Processing elements and sending keys")
     input_el.send_keys(args.notebook_url)
+    print("Input element found:")
     # print("Retrieving elements")
     input_el.send_keys(Keys.ENTER)
     a_tag = driver.find_element(By.TAG_NAME, "textarea")

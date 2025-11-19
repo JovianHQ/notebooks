@@ -14,11 +14,22 @@ def main() -> None:
     for assgn_courses in os.listdir(file_path):
         sec_path = file_path + "/" + assgn_courses
         for notebook in os.listdir(sec_path):
-            notebook_url = f" https://github.com/JovianHQ/notebooks/blob/main/{args.course_name}/{assgn_courses}/{notebook}"
+            notebook_url = f"https://github.com/JovianHQ/notebooks/blob/main/{args.course_name}/{assgn_courses}/{notebook}"
             print(notebook_url)
             result = subprocess.run(
-                ["python", f"{scripts_dir}/capture_tag.py", notebook_url]
+                ["python", f"{scripts_dir}/capture_tag.py", notebook_url],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                env=os.environ.copy(),  # important for Firefox/Selenium
             )
+            print("STDOUT:", result.stdout)
+            if result.stderr:
+                print("STDERR:", result.stderr)
+            if result.returncode != 0:
+                print(
+                    f"ERROR: capture_tag.py failed with return code {result.returncode}"
+                )
             print(f"Done for {notebook_url}")
 
 
