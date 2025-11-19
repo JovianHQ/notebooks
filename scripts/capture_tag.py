@@ -10,6 +10,7 @@ from selenium.webdriver.firefox.options import Options
 
 
 def fix_notebook(path: Path, tag: str):
+    # Memory inefficient but with less risk and lower dependency footprint.
     with open(path) as f:
         notebook_as_json = json.load(f)
         notebook_as_json["cells"][0]["source"].insert(2, tag)
