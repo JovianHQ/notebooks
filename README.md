@@ -57,7 +57,7 @@ set of system commands. Start by installing following software:
 3. Make your changes. Commit them in your branch and then pull a request in github to merge the changes.
    Always provide proper description of what you changed in commit messages and PR's description section.
 
-### How to add "Run on Colab" tags
+### How to add "Open in Colab" tags
 
 1. Install dependencies:
 
@@ -71,4 +71,6 @@ uv sync
 uv run scripts/recursive_tag.py -- data-analysis-with-python-zero-to-pandas
 ```
 
-This will invoke `scripts/capture_tag.py` recursively for each notebook within the course and add the "Run on Colab" tag.
+This will invoke `scripts/capture_tag.py` recursively for each notebook within the course and add the "Open in Colab" tag.
+
+3. Start Jupyter Lab to view the notebooks with "Open in Colab".
