@@ -74,3 +74,9 @@ uv run scripts/recursive_tag.py -- data-analysis-with-python-zero-to-pandas
 This will invoke `scripts/capture_tag.py` recursively for each notebook within the course and add the "Open in Colab" tag.
 
 3. Start Jupyter Lab to view the notebooks with "Open in Colab".
+
+```bash
+uv run jupyter lab
+```
+
+Navigate to any notebook in the modified course to see and test the tag.
