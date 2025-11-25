@@ -56,3 +56,19 @@ set of system commands. Start by installing following software:
 2. Activate python environment by `source .venv/bin/activate`.
 3. Make your changes. Commit them in your branch and then pull a request in github to merge the changes.
    Always provide proper description of what you changed in commit messages and PR's description section.
+
+### How to add "Run on Colab" tags
+
+1. Install dependencies:
+
+```bash
+uv sync
+```
+
+2. Run `scripts/recursive_tag.py` with course slug:
+
+```bash
+uv run scripts/recursive_tag.py -- data-analysis-with-python-zero-to-pandas
+```
+
+This will invoke `scripts/capture_tag.py` recursively for each notebook within the course and add the "Run on Colab" tag.
