@@ -80,3 +80,78 @@ uv run jupyter lab
 ```
 
 Navigate to any notebook in the modified course to see and test the tag.
+
+### How to clean Jovian references from notebooks
+
+The `clean_notebooks_complete.py` script removes all Jovian-related references from notebooks including:
+
+- `jovian.commit()` function calls and cells
+- `import jovian` statements
+- `pip install jovian` commands
+- Forum and community links
+- "Save Your Work" instructions
+
+1. Install dependencies:
+
+```bash
+uv sync
+```
+
+2. Run `scripts/clean_notebooks_complete.py` with course folder name:
+
+```bash
+uv run scripts/clean_notebooks_complete.py -- introduction-to-programming-with-python
+```
+
+This will process all notebooks in the specified course folder and remove Jovian references. The script provides detailed output showing which cells were deleted or edited.
+
+3. Review changes with git:
+
+```bash
+git diff
+```
+
+This shows all modifications made to the notebooks. You can also open the notebooks in Jupyter Lab to verify the changes visually.
+
+4. Check the summary output from the script to see:
+   - Number of notebooks processed
+   - Total cells deleted
+   - Total cells edited
+
+### How to refresh tags for all notebooks in a course
+
+The `recursive_refresh.py` script refreshes "Open in Colab" tags for all notebooks within a course directory. This is useful when multiple notebooks need their tags updated.
+
+1. Install dependencies:
+
+```bash
+uv sync
+```
+
+2. Run `scripts/recursive_refresh.py` with course name:
+
+```bash
+uv run scripts/recursive_refresh.py -- data-analysis-with-python-zero-to-pandas
+```
+
+This will:
+
+- Iterate through all subdirectories in the course folder
+- Call `refresh_tag.py` for each notebook found. It removes the existing "Open in Colab" tag from a notebook and regenerates it with the updated link. This is useful when notebook names change or tags need to be updated.
+- Display progress and any errors encountered
+
+3. Review changes across all notebooks:
+
+```bash
+git diff --stat
+```
+
+This shows a summary of all modified notebooks.
+
+4. Open Jupyter Lab to spot-check several notebooks:
+
+```bash
+uv run jupyter lab
+```
+
+Navigate through different notebooks in the course to verify tags were refreshed properly.
