@@ -1,6 +1,6 @@
 # notebooks
 
-Jupyter notebooks for courses hosted on <https://jovian.com>
+Jupyter notebooks for courses hosted on <https://jovian.com>.
 
 ## Development Setup
 
@@ -19,13 +19,20 @@ set of system commands. Start by installing following software:
 
 2. **Node:**
    Install nodejs from [this](https://nodejs.org/en/download) page. The recommended way of installing node is by
-   [nvm](https://github.com/nvm-sh/nvm) as mentioned in the download page. Make sure node and npm is installed
-   by checking their versions through `node -v` and `npm -v` respectively.
+   [nvm](https://github.com/nvm-sh/nvm) as mentioned in the download page. Make sure node and npm is installed by checking their versions.
+```
+node -v
+npm -v
+```
 
 3. **uv:**
    It is python's package and project manager which can be installed from
    [this](https://docs.astral.sh/uv/getting-started/installation/) page. For Linux and MacOS, it
-   is simply by running the installation script with the command `curl -LsSf https://astral.sh/uv/install.sh | sh`
+   is simply by running the installation script with the command:
+   
+```
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
 
 4. **Python:**
    Ensure that python is installed in your system by command `python --version`. Otherwise,
@@ -36,12 +43,21 @@ set of system commands. Start by installing following software:
 
 ### Setting Up
 
-1. Fork this project in your github profile and clone it locally with command
-   `git clone git@github.com:your_username/notebooks.git`. Don't forget to
-   replace `your_username` with your github's username.
-2. Next up, move into the project with `cd notebooks` and install python dependencies with
-   `uv sync`.
-3. Let's now install codex with command `npm install -g @openai/codex`.
+1. Fork this project in your github profile and clone it locally with command:
+```
+git clone git@github.com:your_username/notebooks.git
+```
+Don't forget to replace `your_username` with your github's username.
+
+2. Next up, move into the project with and install python dependencies with:
+```
+cd notebooks
+uv sync
+```
+3. Let's now install codex with command:
+```
+npm install -g @openai/codex
+```
 4. Run `codex` in your present working directory( i.e. notebooks) to start the AI agent.
    Running the command for the first time will ask you to authenticate by signing into Chatgpt.
 5. Once, the authentication is complete, you can start by asking codex about the overview of the
