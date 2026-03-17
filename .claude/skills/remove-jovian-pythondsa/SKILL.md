@@ -13,16 +13,19 @@ The `jovian` Python library is deprecated. DSA course notebooks (`data-structure
 For each notebook, look for and handle the following:
 
 **1. Remove the install cell** — find and delete or replace:
+
 ```python
 !pip install jovian --upgrade --quiet
 ```
 
 **2. Remove import cells** — find and delete:
+
 ```python
 from jovian.pythondsa import evaluate_test_cases
 from jovian.pythondsa import evaluate_test_case
 ```
-If a cell contains an import line *and* other code (e.g. a `results = ...` call), only remove the import line and keep the rest.
+
+If a cell contains an import line _and_ other code (e.g. a `results = ...` call), only remove the import line and keep the rest.
 
 **3. Replace with the inline implementation** — in place of the install cell (or just before the first `evaluate_test_case`/`evaluate_test_cases` call), add a new code cell with:
 
@@ -119,18 +122,12 @@ def evaluate_test_cases(function, test_cases, error_only=False, summary_only=Fal
 ```
 
 **4. Update markdown cells** — find markdown cells that say things like:
-- *"...helper function from the `jovian` library"* → remove "from the `jovian` library"
-- *"...`evaluate_test_cases` function from `jovian`"* → remove "from `jovian`"
+
+- _"...helper function from the `jovian` library"_ → remove "from the `jovian` library"
+- _"...`evaluate_test_cases` function from `jovian`"_ → remove "from `jovian`"
 
 ## What NOT to Change
 
 - `jovian.com` URLs in markdown cells that are reference/resource links (course pages, assignment pages, learning resources) — these are educational links, not library references
 - "Jovian" as a company name in problem statements
 - `JovianHQ` in GitHub/Colab badge URLs
-
-## Reference
-
-See the diff between `main` and `dsa-new` branches for `lesson-1` as the canonical example:
-```bash
-git diff main dsa-new -- data-structures-and-algorithms-in-python/lesson-1-binary-search-linked-lists-and-complexity/
-```
