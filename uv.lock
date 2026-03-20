@@ -960,10 +960,14 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "jupyter" },
+    { name = "nbconvert" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "jupyter", specifier = ">=1.1.1" }]
+requires-dist = [
+    { name = "jupyter", specifier = ">=1.1.1" },
+    { name = "nbconvert", specifier = ">=7.16.6" },
+]
 
 [[package]]
 name = "packaging"

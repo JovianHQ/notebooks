@@ -1,0 +1,1 @@
+Lesson 4 uses the same notebook as Lesson 3. Please see [lesson-3-decision-trees-and-hyperparameters.ipynb](../lesson-3-decision-trees-and-hyperparameters/lesson-3-decision-trees-and-hyperparameters.ipynb)
